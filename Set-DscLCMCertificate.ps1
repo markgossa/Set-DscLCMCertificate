@@ -11,7 +11,7 @@ function Set-DscLCMCertificate
     )
 
     Write-Verbose 'Checking DSC cert public key path directory on management machine'
-    if((Test-Path $DSCCertPublicKeyPath) -eq $false)
+    if((Test-Path $DSCCertPublicKeyPath) -eq $false) 
     {
         Write-Verbose 'Path does not exist. Creating DSC cert public key path directory on target machine.'
         New-Item -ItemType Directory -Path $DSCCertPublicKeyPath | Out-Null
