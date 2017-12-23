@@ -3,7 +3,7 @@ function Set-DscLCMCertificate
     [CmdletBinding()]
     param (
         [Parameter (Mandatory = $true)]
-        [String[]]
+        [String]
         $ComputerName,
         [Parameter (Mandatory = $false)]
         [String]
@@ -30,10 +30,10 @@ function Set-DscLCMCertificate
             New-Item -ItemType Directory -Path $DSCCertPublicKeyPath | Out-Null
         }
 
-        $DSCCert = Get-ChildItem cert:\localmachine\my | Where-Object {$_.Subject -eq "DscEncryptionCert"}
+        $DSCCert = Get-ChildItem cert:\localmachine\my | Where-Object {$_.Subject -eq "CN=DscEncryptionCert"}
         if (!($DSCCert))
         {
-            Write-Verbose 'No certificate found. Creating new self signed certificate for DSC'
+            Write-Verbose 'No certificate found. Creating new self signed certificate for DSC.'
             $DSCCert = New-SelfSignedCertificate -Type DocumentEncryptionCertLegacyCsp -DnsName 'DscEncryptionCert' -HashAlgorithm SHA256
         }
 
@@ -92,5 +92,3 @@ function Set-DscLCMCertificate
     Set-DscLocalConfigurationManager -ComputerName $ComputerName -Path $env:TEMP\LCMConfig
     return $ConfigurationData
 }
-
-$info = Set-DscLCMCertificate -ComputerName litex01
